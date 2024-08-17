@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HSC Business Studies Flashcards</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f5;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            width: 80%;
+            max-width: 600px;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #00796b;
+        }
+
+        .flashcard {
+            width: 100%;
+            height: 200px;
+            perspective: 1000px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .flashcard > div {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            backface-visibility: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2em;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: transform 0.6s;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .front {
+            background-color: #00796b;
+            color: white;
+        }
+
+        .back {
+            background-color: #ff5722;
+            color: white;
+            transform: rotateY(180deg);
+        }
+
+        .flashcard.flipped .front {
+            transform: rotateY(180deg);
+        }
+
+        .flashcard.flipped .back {
+            transform: rotateY(360deg);
+        }
+
+        .controls {
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            margin: 0 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #00796b;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 1em;
+        }
+
+        button:hover {
+            background-color: #004d40;
+        }
+
+        @media (max-width: 600px) {
+            .flashcard {
+                height: 150px;
+            }
+
+            h1 {
+                font-size: 1.5em;
+            }
+
+            button {
+                padding: 8px 16px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>HSC Business Studies Flashcards</h1>
+        <div id="flashcard" class="flashcard">
+            <div class="front">
+                <p id="question">Click 'Next' to start!</p>
+            </div>
+            <div class="back">
+                <p id="answer">...</p>
+            </div>
+        </div>
+        <div class="controls">
+            <button id="prev">Prev</button>
+            <button id="flip">Flip</button>
+            <button id="next">Next</button>
+        </div>
+    </div>
+    <script>
+        const flashcards = [
+            // Operations Module
+            {
+                question: "What is the strategic role of operations management?",
+                answer: "To contribute to the business's overall goals by transforming inputs into outputs efficiently, meeting customer expectations, and supporting competitive advantage."
+            },
+            {
+                question: "What are the performance objectives in operations management?",
+                answer: "Quality, speed, dependability, flexibility, customisation, and cost."
+            },
+            {
+                question: "Identify the influences on operations.",
+                answer: "Globalisation, technology, quality expectations, cost-based competition, government policies, legal regulation, environmental sustainability."
+            },
+            {
+                question: "What are the inputs in the operations process?",
+                answer: "Inputs include transformed resources (materials, information, customers) and transforming resources (human resources, facilities)."
+            },
+            {
+                question: "Describe the transformation process in operations.",
+                answer: "The transformation process involves the conversion of inputs into outputs through value-adding activities."
+            },
+            {
+                question: "What are outputs in the operations process?",
+                answer: "Outputs are the final goods or services delivered to customers and may include warranties or after-sales service."
+            },
+            {
+                question: "List some strategies in operations management.",
+                answer: "Supply chain management, outsourcing, technology, inventory management, quality management, overcoming resistance to change, global factors."
+            },
+
+            // Marketing Module
+            {
+                question: "What is the strategic role of marketing?",
+                answer: "To identify and meet customer needs, driving revenue and profitability while supporting business growth and market positioning."
+            },
+            {
+                question: "What are the influences on marketing?",
+                answer: "Factors influencing customer choice (psychological, sociocultural, economic, government), consumer laws, ethical considerations."
+            },
+            {
+                question: "What is situational analysis in the marketing process?",
+                answer: "Situational analysis involves conducting a SWOT analysis and product life cycle analysis to assess current market conditions."
+            },
+            {
+                question: "How is market research used in the marketing process?",
+                answer: "Market research is used to gather data on customer needs, preferences, and market trends to inform marketing strategies."
+            },
+            {
+                question: "What are the 4 Ps in the marketing mix?",
+                answer: "Product, Price, Promotion, Place."
+            },
+            {
+                question: "What additional elements are considered in the extended marketing mix?",
+                answer: "People, Processes, Physical evidence, E-marketing, Global marketing."
+            },
+
+            // Finance Module
+            {
+                question: "What is the strategic role of financial management?",
+                answer: "To manage the financial resources of a business to achieve its financial objectives and support overall business goals."
+            },
+            {
+                question: "What are the key financial objectives?",
+                answer: "Profitability, liquidity, efficiency, growth, solvency."
+            },
+            {
+                question: "Identify the internal sources of finance.",
+                answer: "Internal sources of finance include retained profits, sale of assets, and owner's equity."
+            },
+            {
+                question: "What are some external sources of finance?",
+                answer: "Debt (short-term and long-term) and equity (ordinary shares, private equity)."
+            },
+            {
+                question: "What are financial management strategies?",
+                answer: "Cash flow management, working capital management, profitability management, global financial management."
+            },
+            {
+                question: "What are some financial ratios used to assess business performance?",
+                answer: "Liquidity ratios, profitability ratios, efficiency ratios, solvency ratios, market ratios."
+            },
+
+            // Human Resources Module
+            {
+                question: "What is the strategic role of human resource management?",
+                answer: "To manage the workforce to maximize employee performance in alignment with the company's strategic goals."
+            },
+            {
+                question: "What are the key influences on human resources?",
+                answer: "Stakeholders, legal, economic, technological, social, ethics and corporate social responsibility."
+            },
+            {
+                question: "Outline the processes of human resource management.",
+                answer: "Acquisition, development, maintenance, separation."
+            },
+            {
+                question: "What are human resource management strategies?",
+                answer: "Leadership style, job design, recruitment, training and development, performance management, rewards, global strategies, workplace disputes."
+            },
+            {
+                question: "How can the effectiveness of human resource management be measured?",
+                answer: "Indicators such as corporate culture, benchmarking key variables, changes in staff turnover, absenteeism, accidents, levels of disputation, worker satisfaction."
+            }
+        ];
+
+        let currentIndex = 0;
+        let flipped = false;
+
+        document.getElementById('next').addEventListener('click', () => {
+            if (currentIndex < flashcards.length - 1) {
+                currentIndex++;
+            } else {
+                currentIndex = 0;
+            }
+            updateFlashcard();
+        });
+
+        document.getElementById('prev').addEventListener('click', () => {
+            if (currentIndex > 0) {
+                currentIndex--;
+            } else {
+                currentIndex = flashcards.length - 1;
+            }
+            updateFlashcard();
+        });
+
+        document.getElementById('flip').addEventListener('click', () => {
+            flipped = !flipped;
+            document.getElementById('flashcard').classList.toggle('flipped');
+        });
+
+        function updateFlashcard() {
+            flipped = false;
+            document.getElementById('flashcard').classList.remove('flipped');
+            document.getElementById('question').textContent = flashcards[currentIndex].question;
+            document.getElementById('answer').textContent = flashcards[currentIndex].answer;
+        }
+
+        // Initialize the first flashcard
+        updateFlashcard();
+    </script>
+</body>
+</html>
